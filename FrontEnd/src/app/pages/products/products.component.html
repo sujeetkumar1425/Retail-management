@@ -1,0 +1,41 @@
+<div class="page-head">
+  <div><h2>Products</h2><p>Manage products and inventory levels.</p></div>
+  <button class="primary" (click)="openNew()">+ Add Product</button>
+</div>
+
+<div class="alert error" *ngIf="error">{{ error }}</div>
+
+<div class="panel form-panel" *ngIf="showForm">
+  <div class="panel-head"><h3>{{ editingId ? 'Edit Product' : 'Add Product' }}</h3><button class="icon-btn" (click)="showForm=false">✕</button></div>
+  <div class="form-grid">
+    <div><label>Name</label><input [(ngModel)]="form.name"></div>
+    <div><label>SKU</label><input [(ngModel)]="form.sku"></div>
+    <div><label>Price</label><input type="number" [(ngModel)]="form.price"></div>
+    <div><label>Quantity</label><input type="number" [(ngModel)]="form.quantity"></div>
+    <div><label>Reorder Level</label><input type="number" [(ngModel)]="form.reorderLevel"></div>
+    <div><label>Category</label>
+      <select [(ngModel)]="form.category">
+        <option [ngValue]="null">Select category</option>
+        <option *ngFor="let c of categories" [ngValue]="{id: c.id}">{{ c.name }}</option>
+      </select>
+    </div>
+  </div>
+  <button class="primary" (click)="save()">Save Product</button>
+</div>
+
+<div class="panel">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>SKU</th><th>Price</th><th>Quantity</th><th>Reorder</th><th>Category ID</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let p of products">
+          <td><strong>{{ p.name }}</strong></td><td>{{ p.sku }}</td><td>₹{{ p.price | number:'1.2-2' }}</td>
+          <td><span class="badge" [class.warning]="p.quantity <= p.reorderLevel">{{ p.quantity }}</span></td>
+          <td>{{ p.reorderLevel }}</td><td>{{ p.category?.id || '-' }}</td>
+          <td class="actions"><button class="small" (click)="edit(p)">Edit</button><button class="small danger" (click)="remove(p.id!)">Delete</button></td>
+        </tr>
+        <tr *ngIf="!products.length"><td colspan="7" class="empty">No products found.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="page-head">
+  <div><h2>Categories</h2><p>Organize products into categories.</p></div>
+</div>
+
+<div class="alert error" *ngIf="error">{{ error }}</div>
+
+<div class="two-col">
+  <div class="panel">
+    <h3>Add Category</h3>
+    <label>Name</label><input [(ngModel)]="name" placeholder="Electronics">
+    <label>Description</label><textarea [(ngModel)]="description" rows="5" placeholder="Electronic products and accessories"></textarea>
+    <button class="primary" (click)="add()">Add Category</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>All Categories</h3><span class="badge">{{ categories.length }}</span></div>
+    <div class="category-list">
+      <div class="category-item" *ngFor="let c of categories">
+        <div><strong>{{ c.name }}</strong><p>{{ c.description || 'No description' }}</p></div>
+        <button class="small danger" (click)="remove(c.id!)">Delete</button>
+      </div>
+      <div class="empty" *ngIf="!categories.length">No categories found.</div>
+    </div>
+  </div>
+</div>

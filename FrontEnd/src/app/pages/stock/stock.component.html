@@ -1,0 +1,45 @@
+<div class="page-head">
+  <div><h2>Stock Management</h2><p>Record stock in and stock out operations.</p></div>
+</div>
+
+<div class="alert error" *ngIf="error">{{ error }}</div>
+<div class="alert success" *ngIf="success">{{ success }}</div>
+
+<div class="two-col">
+  <div class="panel">
+    <h3>New Stock Transaction</h3>
+    <label>Product</label>
+    <select [(ngModel)]="productId">
+      <option [ngValue]="null">Select product</option>
+      <option *ngFor="let p of products" [ngValue]="p.id">{{ p.name }} — Current: {{ p.quantity }}</option>
+    </select>
+
+    <label>Transaction Type</label>
+    <div class="segmented">
+      <button [class.selected]="type==='STOCK_IN'" (click)="type='STOCK_IN'">Stock In</button>
+      <button [class.selected]="type==='STOCK_OUT'" (click)="type='STOCK_OUT'">Stock Out</button>
+    </div>
+
+    <label>Quantity</label><input type="number" min="1" [(ngModel)]="quantity">
+    <label>Description</label><textarea rows="3" [(ngModel)]="description" placeholder="Initial stock, sale, damaged goods..."></textarea>
+    <button class="primary" (click)="submit()">Record Transaction</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Recent Transactions</h3><span class="badge">{{ transactions.length }}</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th>Type</th><th>Qty</th><th>Date</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let t of transactions">
+            <td>{{ t.product?.name }}</td>
+            <td><span class="badge" [class.success-badge]="t.type==='STOCK_IN'" [class.warning]="t.type==='STOCK_OUT'">{{ t.type }}</span></td>
+            <td>{{ t.quantity }}</td>
+            <td>{{ t.transactionDate | date:'dd MMM yyyy, hh:mm a' }}</td>
+          </tr>
+          <tr *ngIf="!transactions.length"><td colspan="4" class="empty">No transactions yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

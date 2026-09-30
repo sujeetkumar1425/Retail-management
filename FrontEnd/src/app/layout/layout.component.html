@@ -1,0 +1,42 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">R</div>
+      <div>
+        <strong>RetailPro</strong>
+        <span>Management</span>
+      </div>
+    </div>
+
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active">📊 <span>Dashboard</span></a>
+      <a routerLink="/products" routerLinkActive="active">📦 <span>Products</span></a>
+      <a routerLink="/categories" routerLinkActive="active">🗂️ <span>Categories</span></a>
+      <a routerLink="/stock" routerLinkActive="active">🔄 <span>Stock</span></a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-mini">
+        <div class="avatar">{{ auth.user?.name?.charAt(0) || 'U' }}</div>
+        <div>
+          <strong>{{ auth.user?.name }}</strong>
+          <span>{{ auth.user?.role }}</span>
+        </div>
+      </div>
+      <button class="logout" (click)="auth.logout()">↪ Logout</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1>Retail Management System</h1>
+        <p>Inventory at a glance</p>
+      </div>
+      <div class="top-user">{{ auth.user?.email }}</div>
+    </header>
+    <section class="content">
+      <router-outlet />
+    </section>
+  </main>
+</div>

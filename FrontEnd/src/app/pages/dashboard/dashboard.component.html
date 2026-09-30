@@ -1,0 +1,29 @@
+<div class="page-head">
+  <div><h2>Dashboard</h2><p>Overview of your inventory.</p></div>
+</div>
+
+<div class="alert error" *ngIf="error">{{ error }}</div>
+
+<div class="stats" *ngIf="summary">
+  <div class="stat-card"><span>Total Products</span><strong>{{ summary.totalProducts }}</strong><div>📦</div></div>
+  <div class="stat-card"><span>Total Categories</span><strong>{{ summary.totalCategories }}</strong><div>🗂️</div></div>
+  <div class="stat-card"><span>Total Stock</span><strong>{{ summary.totalStock }}</strong><div>📈</div></div>
+  <div class="stat-card warning"><span>Low Stock</span><strong>{{ summary.lowStockProducts }}</strong><div>⚠️</div></div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>Low Stock Products</h3><span class="badge warning">{{ lowStock.length }} items</span></div>
+  <div *ngIf="lowStock.length === 0" class="empty">No low-stock products right now.</div>
+  <div class="table-wrap" *ngIf="lowStock.length">
+    <table>
+      <thead><tr><th>Product</th><th>SKU</th><th>Current Stock</th><th>Reorder Level</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let p of lowStock">
+          <td>{{ p.name }}</td><td>{{ p.sku }}</td>
+          <td><span class="badge warning">{{ p.quantity }}</span></td>
+          <td>{{ p.reorderLevel }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
