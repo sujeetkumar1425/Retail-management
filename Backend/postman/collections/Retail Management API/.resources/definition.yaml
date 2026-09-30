@@ -1,0 +1,7 @@
+$kind: collection
+scripts:
+  - type: http:beforeRequest
+    code: "GET\r
+
+      http://localhost:8080/api/categories"
+    language: text/javascript
