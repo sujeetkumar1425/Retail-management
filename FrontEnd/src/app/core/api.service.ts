@@ -1,59 +1,151 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { Category, DashboardSummary, Product, StockTransaction } from './models';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService {
-  private readonly http = inject(HttpClient);
-  private readonly api = environment.apiUrl;
 
-  dashboard(): Observable<DashboardSummary> {
-    return this.http.get<DashboardSummary>(`${this.api}/dashboard/summary`);
+  private readonly API_URL = 'http://localhost:8080/api';
+
+  constructor(private http: HttpClient) {}
+
+  // =========================================================
+  // DASHBOARD
+  // =========================================================
+
+  dashboard(): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/dashboard/summary`
+    );
   }
 
-  categories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.api}/categories`);
+  lowStock(): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/products/low-stock`
+    );
   }
 
-  createCategory(data: Category): Observable<Category> {
-    return this.http.post<Category>(`${this.api}/categories`, data);
+  // =========================================================
+  // CATEGORIES
+  // =========================================================
+
+  categories(): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/categories`
+    );
   }
 
-  deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/categories/${id}`);
+  getCategory(id: number): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/categories/${id}`
+    );
   }
 
-  products(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.api}/products`);
+  createCategory(category: any): Observable<any> {
+    return this.http.post<any>(
+        `${this.API_URL}/categories`,
+        category
+    );
   }
 
-  lowStock(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.api}/products/low-stock`);
+  updateCategory(
+      id: number,
+      category: any
+  ): Observable<any> {
+    return this.http.put<any>(
+        `${this.API_URL}/categories/${id}`,
+        category
+    );
   }
 
-  createProduct(data: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.api}/products`, data);
+  deleteCategory(id: number): Observable<any> {
+    return this.http.delete<any>(
+        `${this.API_URL}/categories/${id}`
+    );
   }
 
-  updateProduct(id: number, data: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.api}/products/${id}`, data);
+  // =========================================================
+  // PRODUCTS
+  // =========================================================
+
+  products(): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/products`
+    );
   }
 
-  deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}/products/${id}`);
+  getProduct(id: number): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/products/${id}`
+    );
   }
 
-  stockTransactions(): Observable<StockTransaction[]> {
-    return this.http.get<StockTransaction[]>(`${this.api}/stock`);
+  createProduct(product: any): Observable<any> {
+    return this.http.post<any>(
+        `${this.API_URL}/products`,
+        product
+    );
   }
 
-  addStock(productId: number, type: 'STOCK_IN' | 'STOCK_OUT', quantity: number, description: string): Observable<StockTransaction> {
+  updateProduct(
+      id: number,
+      product: any
+  ): Observable<any> {
+    return this.http.put<any>(
+        `${this.API_URL}/products/${id}`,
+        product
+    );
+  }
+
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete<any>(
+        `${this.API_URL}/products/${id}`
+    );
+  }
+
+  // =========================================================
+  // STOCK
+  // =========================================================
+
+  stockTransactions(): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/stock`
+    );
+  }
+
+  stockForProduct(productId: number): Observable<any> {
+    return this.http.get<any>(
+        `${this.API_URL}/stock/${productId}`
+    );
+  }
+
+  addStock(
+      productId: number,
+      type: string,
+      quantity: number,
+      description: string
+  ): Observable<any> {
+
     let params = new HttpParams()
-      .set('type', type)
-      .set('quantity', quantity);
-    if (description.trim()) params = params.set('description', description.trim());
-    return this.http.post<StockTransaction>(`${this.api}/stock/${productId}`, null, { params });
+        .set('type', type)
+        .set('quantity', quantity.toString());
+
+    if (description && description.trim()) {
+      params = params.set(
+          'description',
+          description.trim()
+      );
+    }
+
+    return this.http.post<any>(
+        `${this.API_URL}/stock/${productId}`,
+        null,
+        {
+          params
+        }
+    );
   }
+
 }
